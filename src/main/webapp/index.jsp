@@ -10,12 +10,12 @@
 	<table>
 		<form>
 			<tr>
-			<td>ログイン<input type = "text" name = "name"></td>
-			<td>一覧<input type = "text" name = "itiran"></td>
+			<td><input type = "submit" value ="ログイン" name = "name"></td>
+			<td><input type = "text" value = "一覧" name = "itiran"></td>
 			</tr>
 			<tr>
-			<td>新規登録<input type = "text" name = "new"></td>
-			<td>削除<input type = "text" name = "del"></td>
+			<td><input type = "text" value = "新規登録" name = "new"></td>
+			<td><input type = "text" value = "削除" name = "del"></td>
 			</tr>
 		</form>
 	</table>
