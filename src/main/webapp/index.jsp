@@ -31,7 +31,7 @@
 <table>
     <tr>
         <td>
-            <button class="button-like" onclick="location.href='/jsp/Login.jsp'">
+            <button class="button-like" onclick="location.href='Login.jsp'">
                 ログイン
             </button>
         </td>
