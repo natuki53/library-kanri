@@ -36,7 +36,6 @@
                 <button type="submit">新規登録</button>
             </form>
         </td>
-
         <!-- 2行目 右: 削除 -->
         <td align="center">
             <form action="deleteAcount" method="get">

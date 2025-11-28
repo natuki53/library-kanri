@@ -9,37 +9,40 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-/**
- * Servlet implementation class newAcount
- */
 @WebServlet("/newAcount")
 public class newAcount extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
+    private static final long serialVersionUID = 1L;
+
     public newAcount() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
-	}
+    // 新規アカウント登録画面を表示
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		RequestDispatcher dispatcher = 
-				request.getRequestDispatcher(
-				"WEB-INF/jsp/newAcountResult.jsp");
-		dispatcher.forward(request,response);
-	}
+        RequestDispatcher dispatcher =
+                request.getRequestDispatcher("/WEB-INF/jsp/newAcount.jsp");
+        dispatcher.forward(request, response);
+    }
+
+    // 登録フォームを受け取って結果画面へ
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        request.setCharacterEncoding("UTF-8");
+
+        String name = request.getParameter("name");
+        String pass = request.getParameter("pass");
+
+        // JSP に渡す
+        request.setAttribute("name", name);
+        request.setAttribute("pass", pass);
+
+        RequestDispatcher dispatcher =
+                request.getRequestDispatcher("/WEB-INF/jsp/newAcountResult.jsp");
+        dispatcher.forward(request, response);
+    }
 }

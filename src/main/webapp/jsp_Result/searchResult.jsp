@@ -5,6 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<link rel="stylesheet" href="CSS/index.css">
 </head>
 <body>
 <h1>登録完了！！</h1>
