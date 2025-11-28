@@ -2,6 +2,7 @@ package servlet;
 
 import java.io.IOException;
 
+import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -36,6 +37,9 @@ public class newAcount extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		doGet(request, response);
+		RequestDispatcher dispatcher = 
+				request.getRequestDispatcher(
+				"WEB-INF/jsp/newAcountResult.jsp");
+		dispatcher.forward(request,response);
 	}
 }
