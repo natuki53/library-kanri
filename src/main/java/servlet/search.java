@@ -12,14 +12,14 @@ import jakarta.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class Main
  */
-@WebServlet("/Main")
-public class Main extends HttpServlet {
+@WebServlet("/search")
+public class search extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public Main() {
+    public search() {
         super();
         // TODO Auto-generated constructor stub
     }
