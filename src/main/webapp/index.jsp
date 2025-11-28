@@ -32,14 +32,14 @@
     <tr>
         <!-- 2行目 左: 新規登録 -->
         <td align="center">
-            <form action="newAcount" method="post">
+            <form action="newAcount" method="get">
                 <button type="submit">新規登録</button>
             </form>
         </td>
 
         <!-- 2行目 右: 削除 -->
         <td align="center">
-            <form action="deleteAcount" method="post">
+            <form action="deleteAcount" method="get">
                 <button type="submit">削除</button>
             </form>
         </td>

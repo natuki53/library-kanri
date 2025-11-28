@@ -10,37 +10,43 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class Main
+ * 図書検索メニューへ遷移するサーブレット
+ * index.jsp → /search → main.jsp
  */
 @WebServlet("/search")
 public class search extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-       
+    private static final long serialVersionUID = 1L;
+
     /**
-     * @see HttpServlet#HttpServlet()
+     * 初期処理（特別な初期化が不要なため空のまま）
      */
     public search() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
-	}
+    /**
+     * GETリクエスト時（直接アクセスされた場合）
+     * システムとしては POST 遷移を前提とするため、メニュー(main.jsp)へフォワードする。
+     */
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		RequestDispatcher dispatcher = 
-				request.getRequestDispatcher(
-				"WEB-INF/jsp/main.jsp");
-		dispatcher.forward(request,response);
-	}
+        RequestDispatcher dispatcher =
+                request.getRequestDispatcher("jsp_Result/searchResult.jsp");
+        dispatcher.forward(request, response);
+    }
 
+    /**
+     * index.jsp の検索ボタンクリック（POST）で呼ばれるメソッド
+     * ここでは検索画面（ WEB-INF/search.jsp）に遷移するだけ。
+     */
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        RequestDispatcher dispatcher =
+                request.getRequestDispatcher("WEB-INF/jsp/search.jsp");
+        dispatcher.forward(request, response);
+    }
 }
