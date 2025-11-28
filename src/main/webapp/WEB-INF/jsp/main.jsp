@@ -4,9 +4,11 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>図書管理システム！</title>
 </head>
 <body>
 
+<h1>登録完了！！</h1>
+<a href="index.jsp">へ</a>
 </body>
 </html>
