@@ -9,6 +9,9 @@
 
 </head>
 <body>
+
+	<h1>本登録</h1>
+
 	<form action="Main" method="post">
 		ID:<input type = "number" name = "id"><br>
 		名前:<input type = "text" name = "name"><br>
