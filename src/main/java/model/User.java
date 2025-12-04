@@ -4,7 +4,7 @@ package model;
 public class User {
 
 	private String name;
-	private String id;
+	//private String id;
 	private String pass;
 	
 	public User() {}
