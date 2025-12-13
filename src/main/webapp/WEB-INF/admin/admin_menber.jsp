@@ -82,6 +82,8 @@
 %>
 </table>
 
+	<a href = "administrator.jsp">管理者画面に戻る</a>
+
 <%
     } catch (Exception e) {
 

@@ -59,9 +59,6 @@ public class search extends HttpServlet {
         GetMutterListLogic getMutterListLogic = new GetMutterListLogic();
         List<Mutter> mutterList = getMutterListLogic.execute();
         request.setAttribute("list", mutterList);
-    	
-        // ログイン中ユーザ名を表示したい場合の設定
-        request.setAttribute("loginUser", user);
 
         RequestDispatcher dispatcher =
                 request.getRequestDispatcher("WEB-INF/jsp/searchResult.jsp");

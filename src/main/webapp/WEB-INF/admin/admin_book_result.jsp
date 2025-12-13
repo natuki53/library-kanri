@@ -4,6 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<link rel="stylesheet" href="CSS/index.css">
 <title>本登録完了️</title>
 </head>
 <body>
