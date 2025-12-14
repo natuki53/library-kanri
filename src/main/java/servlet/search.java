@@ -1,6 +1,7 @@
 package servlet;
 
 import java.io.IOException;
+import java.util.List;
 
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
@@ -9,47 +10,49 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+import DAO.BookDAO;
+import model.Book;
+
 /**
- * 図書検索を担当するサーブレット
- * URL : /search
- *
- * 【役割】
- * ・GET  ：検索画面の初期表示
- * ・POST ：検索条件を受け取り、同じ画面に検索結果を表示
+ * 検索画面用Servlet
  */
 @WebServlet("/search")
 public class search extends HttpServlet {
-    private static final long serialVersionUID = 1L;
+	// doGet：初期表示（全件）
+	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+	        throws ServletException, IOException {
 
-    /**
-     * 初期表示（検索結果なし）
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+	    BookDAO dao = new BookDAO();
+	    List<Book> bookList = dao.findAll();
 
-        // search.jsp を表示
-        RequestDispatcher dispatcher =
-                request.getRequestDispatcher("WEB-INF/jsp/search.jsp");
-        dispatcher.forward(request, response);
-    }
+	    request.setAttribute("bookList", bookList);
+	    request.setAttribute("mode", "all"); // ★初期表示フラグ
 
-    /**
-     * 検索ボタン押下時の処理
-     */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+	    RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/jsp/search.jsp");
+	    rd.forward(request, response);
+	}
 
-        // 文字化け防止
-        request.setCharacterEncoding("UTF-8");
+	// doPost：検索結果表示
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+	        throws ServletException, IOException {
 
-        // フォームから入力された書籍名を取得
-        String book = request.getParameter("book");
+	    request.setCharacterEncoding("UTF-8");
 
-        // 同じ search.jsp に結果を表示
-        RequestDispatcher dispatcher =
-                request.getRequestDispatcher("WEB-INF/jsp/search.jsp");
-        dispatcher.forward(request, response);
-    }
+	    String keyword = request.getParameter("keyword");
+
+	    BookDAO dao = new BookDAO();
+	    List<Book> bookList = dao.searchByName(keyword);
+
+	    request.setAttribute("bookList", bookList);
+	    request.setAttribute("mode", "search"); // ★検索フラグ
+	    
+	    System.out.println("取得件数：" + bookList.size());
+	    
+	    request.setAttribute("keyword", keyword); // 表示用（任意）
+
+	    RequestDispatcher rd = request.getRequestDispatcher("/search.jsp");
+	    rd.forward(request, response);
+	}
 }

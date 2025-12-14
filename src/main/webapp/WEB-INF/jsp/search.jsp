@@ -1,93 +1,78 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ page import="java.sql.*" %>
+<%@ page import="java.util.List" %>
+<%@ page import="model.Book" %>
 
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>図書管理システム</title>
-<link rel="stylesheet" href="CSS/search.css">
+<title>図書検索</title>
+<link rel="stylesheet" href="<%= request.getContextPath() %>/css/search.css">
 </head>
+
 <body>
 
-<!-- 左側 -->
-<div class="left">
-    <h1>検索</h1>
+<%
+    String mode = (String) request.getAttribute("mode");
+    String keyword = (String) request.getAttribute("keyword");
+    if (keyword == null) keyword = "";
+%>
 
-    <form action="search" method="post">
-    <div class="form-group">
-        <label>書籍名：</label><br>
-        <input type="text" name="book">
+<div class="wrapper">
+    <div class="container">
+
+        <!-- 左側：検索ボックス（常に表示） -->
+        <div class="left">
+            <h2>検索</h2>
+            <form action="<%= request.getContextPath() %>/search" method="post">
+                <label>書籍名</label>
+                <input type="text" name="keyword" value="<%= keyword %>">
+                <input type="submit" value="検索">
+            </form>
+        </div>
+
+        <!-- 右側：全件 or 検索結果 -->
+        <div class="right">
+            <h2>
+                <%= "search".equals(mode)
+                        ? "検索結果（「" + keyword + "」）"
+                        : "全件表示" %>
+            </h2>
+
+            <table>
+                <tr>
+                    <th>書籍名</th>
+                    <th>冊数</th>
+                </tr>
+
+                <%
+                    List<Book> bookList =
+                        (List<Book>) request.getAttribute("bookList");
+
+                    if (bookList != null && !bookList.isEmpty()) {
+                        for (Book book : bookList) {
+                %>
+                <tr>
+                    <td><%= book.getName() %></td>
+                    <td><%= book.getNumber() %></td>
+                </tr>
+                <%
+                        }
+                    } else {
+                %>
+                <tr>
+                    <td colspan="2" class="no-data">
+                        該当する書籍はありません
+                    </td>
+                </tr>
+                <%
+                    }
+                %>
+            </table>
+        </div>
+
     </div>
-
-    <div class="form-group">
-        <button type="submit">検索</button>
-    </div>
-</form>
-
-    <br>
-    <form action="Logout" method="get">
-        <button type="submit">ログアウト画面へ遷移</button>
-    </form>
-    <a href="index.jsp">戻る</a>
-</div>
-
-<!-- 右側 -->
-<div class="right">
-    <h1>DB一覧</h1>
-
-    <table>
-        <tr>
-            <th>数量</th>
-            <th>書籍名</th>
-        </tr>
-
-<%
-    // ===============================
-    // DB接続情報
-    // ===============================
-    String url  = "jdbc:mysql://localhost:3306/library-touroku?serverTimezone=JST";
-    String user = "root";
-    String pass = "";
-
-    Connection conn = null;
-    PreparedStatement ps = null;
-    ResultSet rs = null;
-
-    try {
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        conn = DriverManager.getConnection(url, user, pass);
-
-        String sql = "SELECT book, number FROM list";
-        ps = conn.prepareStatement(sql);
-        rs = ps.executeQuery();
-
-        while (rs.next()) {
-            String book = rs.getString("book");
-            int number = rs.getInt("number");
-%>
-        <tr>
-            <td><%= number %></td>
-            <td><%= book %></td>
-        </tr>
-<%
-        }
-    } catch (Exception e) {
-%>
-        <tr>
-            <td colspan="2" style="color:red;">
-                エラー：<%= e.getMessage() %>
-            </td>
-        </tr>
-<%
-    } finally {
-        if (rs != null)   try { rs.close(); }   catch (Exception e) {}
-        if (ps != null)   try { ps.close(); }   catch (Exception e) {}
-        if (conn != null) try { conn.close(); } catch (Exception e) {}
-    }
-%>
-    </table>
 </div>
 
 </body>
