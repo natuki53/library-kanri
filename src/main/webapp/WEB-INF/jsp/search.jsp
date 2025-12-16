@@ -22,7 +22,7 @@
 <div class="wrapper">
     <div class="container">
 
-        <!-- 左側：検索ボックス（常に表示） -->
+        <!-- 上側：検索ボックス（常に表示） -->
         <div class="left">
             <h2>検索</h2>
             <form action="<%= request.getContextPath() %>/search" method="post">
@@ -32,7 +32,9 @@
             </form>
         </div>
 
-        <!-- 右側：全件 or 検索結果 -->
+		<a href = "index.jsp">TOPへ</a>
+
+        <!-- 下側：全件 or 検索結果 -->
         <div class="right">
             <h2>
                 <%= "search".equals(mode)
