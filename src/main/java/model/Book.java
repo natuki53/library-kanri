@@ -4,7 +4,6 @@ package model;
  * 書籍情報を保持するJavaBeans
  */
 public class Book {
-
     private String name;
     private int number;
 
