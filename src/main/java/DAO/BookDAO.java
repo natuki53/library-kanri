@@ -25,18 +25,18 @@ public class BookDAO {
     public List<Book> findAll() {
         List<Book> bookList = new ArrayList<>();
 
-        String sql = "SELECT name, number FROM list";
+        String sql = "SELECT book, number FROM list";
 
         try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS);
              PreparedStatement pstmt = conn.prepareStatement(sql);
              ResultSet rs = pstmt.executeQuery()) {
 
             while (rs.next()) {
-                String name = rs.getString("name");
+                String name = rs.getString("book"); // ★修正
                 int number = rs.getInt("number");
 
-                Book book = new Book(name, number);
-                bookList.add(book);
+                Book bookObj = new Book(name, number);
+                bookList.add(bookObj);
             }
 
         } catch (Exception e) {
@@ -46,13 +46,14 @@ public class BookDAO {
         return bookList;
     }
 
+
     /**
      * 書籍名 部分一致検索
      */
     public List<Book> searchByName(String keyword) {
         List<Book> bookList = new ArrayList<>();
 
-        String sql = "SELECT name, number FROM list WHERE name LIKE ?";
+        String sql = "SELECT book, number FROM list WHERE book LIKE ?";
 
         try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -62,11 +63,11 @@ public class BookDAO {
             ResultSet rs = pstmt.executeQuery();
 
             while (rs.next()) {
-                String name = rs.getString("name");
+                String name = rs.getString("book"); // ★修正
                 int number = rs.getInt("number");
 
-                Book book = new Book(name, number);
-                bookList.add(book);
+                Book bookObj = new Book(name, number);
+                bookList.add(bookObj);
             }
 
         } catch (Exception e) {
@@ -75,4 +76,5 @@ public class BookDAO {
 
         return bookList;
     }
+
 }

@@ -52,7 +52,7 @@ public class search extends HttpServlet {
 	    
 	    request.setAttribute("keyword", keyword); // 表示用（任意）
 
-	    RequestDispatcher rd = request.getRequestDispatcher("/search.jsp");
+	    RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/jsp/search.jsp");
 	    rd.forward(request, response);
 	}
 }
