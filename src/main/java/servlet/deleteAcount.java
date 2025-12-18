@@ -61,6 +61,10 @@ public class deleteAcount extends HttpServlet {
         // UserDAO dao = new UserDAO();
         // dao.delete(name);
 
+        RequestDispatcher rd =
+        	    request.getRequestDispatcher("/Logout");
+        	rd.forward(request, response);
+        
         RequestDispatcher dispatcher =
                 request.getRequestDispatcher("/WEB-INF/jsp_Result/deleteAcountResult.jsp");
         dispatcher.forward(request, response);
