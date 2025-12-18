@@ -46,8 +46,6 @@
     </form>
 
 	<!-- 削除画面(deleteAcount.jsp)に移動 -->
-    <form action="deleteAcount" method="get">
-        <button type="submit">削除</button>
     <form action="Logout" method="post">
         <button type="submit">ログアウト</button>
     </form>

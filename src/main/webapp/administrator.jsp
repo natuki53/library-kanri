@@ -21,6 +21,8 @@
 		<input type = "submit" value = "登録">
 		<a href="index.jsp">戻る</a>
 	</form>
+	
+	
 <div class="menu-container">
 
 	<form action="admin_book_servlet" method="get">
