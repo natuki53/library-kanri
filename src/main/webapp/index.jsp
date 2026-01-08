@@ -1,60 +1,48 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-
-<%@ page import="model.User" %>
-
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>図書館管理システム</title>
-<link rel="stylesheet" href="CSS/index.css">
+<link rel="stylesheet" href="<%= request.getContextPath() %>/CSS/common.css">
+<title>図書管理システム</title>
 </head>
-
 <body>
+	<h1>図書管理システム</h1>
 
-<h1>図書館管理システム</h1>
+	<table>
+	<tr>
+		<th>
+			<form action="newAcount_servlet" method="get">
+				<input type="submit" value="新規登録">
+			</form>
+		</th>
+		<th>
+			<form action="Login_servlet" method="get">
+				<input type="submit" value="ログイン">
+			</form>
+		</th>
+	</tr>
+	<tr>
+		<th>
+			<form action="rental_servlet" method="get">
+				<input type="submit" value="貸し出し">
+			</form>
+		</th>
+		<th>
+			<form action="Logout_servlet" method="get">
+				<input type="submit" value="ログアウト">
+			</form>
+		</th>
+	</tr>
+	</table>
 
-<!-- ログインユーザー表示 -->
-<p>
-ログイン中：
-<%
-    User user = (User) session.getAttribute("loginUser");
-    if (user != null) {
-        out.print(user.getName()); // 名前だけ表示
-    } else {
-        out.print("未ログイン");
-    }
-%>
-</p>
+</table>
 
-<div class="menu-container">
-
-	<!-- ログイン画面(Login.jsp)に移動 -->
-    <form action="Login" method="get">
-        <button type="submit">ログイン</button>
-    </form>
-    
-	<!-- 本の一覧画面(search.jsp)に移動 -->
-    <form action="search" method="get">
-        <button type="submit">一覧</button>
-    </form>
-
-	<!-- 新規登録画面(newAcount.jsp)に移動 -->
-    <form action="newAcount" method="get">
-        <button type="submit">新規登録</button>
-    </form>
-
-	<!-- ログアウト画面(Logout.jsp)に移動 -->
-    <form action="Logout" method="post">
-        <button type="submit">ログアウト</button>
-    </form>
-
-</div>
-
-<form action="deleteAcount" method="get" class="delete-floating">
-    <button type="submit">アカウント削除</button>
+<form action="deleteAcount_servlet" method="get" class="delete-btn">
+    <input type="submit" value="アカウント削除">
 </form>
 
 </body>
+</html>
 </html>

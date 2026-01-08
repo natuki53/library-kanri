@@ -4,12 +4,11 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
-<link rel="stylesheet" href="CSS/index.css">
+<link rel="stylesheet" href="<%= request.getContextPath() %>/CSS/common.css">
+<title>登録完了</title>
 </head>
 <body>
-<h1>登録完了！！</h1>
-<a href="index.jsp">TOPへ</a>
-
+<h1>登録完了</h1>
+<a href = "index.jsp">TOPへ</a>
 </body>
 </html>

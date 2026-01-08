@@ -5,18 +5,18 @@
 <head>
 <meta charset="UTF-8">
 <title>アカウント削除</title>
-<link rel="stylesheet" href="CSS/index.css">
 </head>
 <body>
-	
-	<h1>アカウント削除</h1>
-	
-<!--  deleteAcount.javaに渡す -->
-	<form action="deleteAcount" method="post">
-		ユーザー名 : <input type="text" name="name"><br>
-		パスワード : <input type="password" name="pass"><br>
-		<input type="submit" value="削除">
-		<a href="index.jsp">戻る</a>
-	</form>
+
+<h2>アカウント削除</h2>
+
+<p>本当にアカウントを削除しますか？</p>
+
+<form action="deleteAcount_servlet" method="post">
+    <input type="submit" value="削除する">
+</form>
+
+<a href="menu.jsp">戻る</a>
+
 </body>
 </html>
