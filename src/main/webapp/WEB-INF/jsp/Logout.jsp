@@ -13,6 +13,10 @@
 <a href="<%= request.getContextPath() %>/Login_servlet">
     ログイン画面へ
 </a>
+<br>
+<a href="index.jsp">
+    TOPへ
+</a>
 
 </body>
 </html>
