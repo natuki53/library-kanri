@@ -46,7 +46,6 @@ if (message != null) {
 </form>
 <table border="1">
 <tr>
-    <th>ID</th>
     <th>書籍名</th>
     <th>在庫数</th>
 </tr>
@@ -57,7 +56,6 @@ if (books != null) {
     for (Book book : books) {
 %>
 <tr>
-    <td><%= book.getId() %></td>
     <td><%= book.getBook() %></td>
     <td><%= book.getNumber() %></td>
 </tr>
