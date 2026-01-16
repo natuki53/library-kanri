@@ -17,26 +17,38 @@ import model_Logic.newAcount_Logic;
 public class newAcount_servlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-    // GETはいじらない
+    // 新規登録画面に遷移
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
 
-    /**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-	//新規登録画面に遷移
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		 RequestDispatcher dispatcher =
-	                request.getRequestDispatcher("/WEB-INF/jsp/newAcount.jsp");
-	        dispatcher.forward(request, response);
-		
-	}
-    
+        RequestDispatcher dispatcher =
+                request.getRequestDispatcher("/WEB-INF/jsp/newAcount.jsp");
+        dispatcher.forward(request, response);
+    }
+
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
+        request.setCharacterEncoding("UTF-8");
 
         String name = request.getParameter("name");
         String pass = request.getParameter("pass");
 
-        User user = new User(name, pass);
+        // ===== 完全入力チェック =====
+        if (isBlank(name) || isBlank(pass)) {
+
+            request.setAttribute("errorMsg", "名前とパスワードは必須です");
+
+            RequestDispatcher dispatcher =
+                    request.getRequestDispatcher("/WEB-INF/jsp/newAcount.jsp");
+            dispatcher.forward(request, response);
+            return;
+        }
+        // ==========================
+
+        User user = new User(name.trim(), pass.trim());
 
         newAcount_Logic logic = new newAcount_Logic();
         boolean isRegistered = logic.execute(user);
@@ -52,5 +64,17 @@ public class newAcount_servlet extends HttpServlet {
         RequestDispatcher dispatcher =
                 request.getRequestDispatcher("/WEB-INF/jsp_Result/newAcount_Result.jsp");
         dispatcher.forward(request, response);
+    }
+
+    /**
+     * null / 空文字 / 半角スペース / 全角スペースのみ を true
+     */
+    private boolean isBlank(String str) {
+        if (str == null) {
+            return true;
+        }
+        // 全角スペースを半角に変換してからtrim
+        String replaced = str.replace("　", " ").trim();
+        return replaced.isEmpty();
     }
 }
