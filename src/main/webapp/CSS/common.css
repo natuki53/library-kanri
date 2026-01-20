@@ -133,3 +133,23 @@ form.delete-btn input[type="submit"] {
 form.delete-btn input[type="submit"]:hover {
     background-color: #b71c1c;
 }
+
+/* トップへ戻る */
+.top-area {
+    margin-top: 25px;
+    text-align: center;
+}
+
+.top-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #777;
+    color: #ffffff;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.top-btn:hover {
+    opacity: 0.85;
+}
