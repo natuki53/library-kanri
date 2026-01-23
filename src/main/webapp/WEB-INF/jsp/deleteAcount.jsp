@@ -4,6 +4,8 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<link rel="stylesheet" href="<%= request.getContextPath() %>/CSS/common.css">
+<link rel="stylesheet" href="<%= request.getContextPath() %>/CSS/search_form.css">
 <title>アカウント削除</title>
 </head>
 <body>
