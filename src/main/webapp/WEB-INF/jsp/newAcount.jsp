@@ -32,6 +32,8 @@
     <input type="submit" value="登録"><br>
 </form>
 
-<a href="index.jsp">TOPへ</a>
+<div class="right-area">
+    <a href="index.jsp">TOPへ</a>
+</div>
 </body>
 </html>

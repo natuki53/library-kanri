@@ -13,7 +13,7 @@ public class LendDao {
     private static final String PASS = "";
 
     /**
-     * すでに借りているか判定
+     * すでにその本を借りているか判定
      */
     public boolean isAlreadyLent(String name, String bookname) {
         String sql = "SELECT COUNT(*) FROM lend WHERE name=? AND bookname=?";
@@ -30,7 +30,7 @@ public class LendDao {
 
         } catch (Exception e) {
             e.printStackTrace();
-            return true;
+            return true; // 安全側
         }
     }
 
@@ -52,6 +52,13 @@ public class LendDao {
             e.printStackTrace();
             return 0;
         }
+    }
+
+    /**
+     * ★ 追加：未返却の本を借りているか判定（アカウント削除用）
+     */
+    public boolean hasLendingBooks(String name) {
+        return countLend(name) > 0;
     }
 
     /**
@@ -96,6 +103,7 @@ public class LendDao {
 
     /**
      * 返却処理（delete + 在庫増加 + user.lend 増加）
+     * ※ 実際に借りていない場合は false
      */
     public boolean returnBook(String name, String bookname) {
 
@@ -117,10 +125,16 @@ public class LendDao {
                 ps1.setString(1, name);
                 ps1.setString(2, bookname);
 
+                // 実際に借りていたかチェック
+                int deleted = ps1.executeUpdate();
+                if (deleted == 0) {
+                    con.rollback();
+                    return false;
+                }
+
                 ps2.setString(1, bookname);
                 ps3.setString(1, name);
 
-                ps1.executeUpdate();
                 ps2.executeUpdate();
                 ps3.executeUpdate();
 

@@ -29,7 +29,9 @@ if (error != null) {
     <input type="submit" value="ログイン">
 </form>
 
-<a href="index.jsp">TOPへ</a>
+<div class="right-area">
+    <a href="index.jsp">TOPへ</a>
+</div>
 
 </body>
 </html>

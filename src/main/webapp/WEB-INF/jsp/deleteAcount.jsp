@@ -10,9 +10,9 @@
 </head>
 <body>
 
-<h2>アカウント削除</h2>
+<h1>アカウント削除</h1>
 
-<p>本当にアカウントを削除しますか？</p>
+<p>ログアウトしてからアカウント削除をしてください</p>
 
 <form action="deleteAcount_servlet" method="post">
     <label>ユーザー名</label><br>
@@ -28,7 +28,9 @@
     <p style="color:red">${error}</p>
 </c:if>
 
-<a href="index.jsp">戻る</a>
+<div class="right-area">
+    <a href="index.jsp">TOPへ</a>
+</div>
 
 </body>
 </html>

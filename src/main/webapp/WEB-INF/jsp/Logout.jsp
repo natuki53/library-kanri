@@ -9,15 +9,12 @@
 </head>
 <body>
 
-<h2><%= request.getAttribute("message") %></h2>
+<h1><%= request.getAttribute("message") %></h1>
 
-<a href="<%= request.getContextPath() %>/Login_servlet">
-    ログイン画面へ
-</a>
+<a href="<%= request.getContextPath() %>/Login_servlet">ログイン画面へ</a>
 <br>
-<a href="index.jsp">
-    TOPへ
-</a>
-
+<div class="right-area">
+    <a href="index.jsp">TOPへ</a>
+</div>
 </body>
 </html>

@@ -14,14 +14,16 @@ import jakarta.servlet.http.HttpSession;
 public class Login_servlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
+    // ログイン画面表示
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-    	RequestDispatcher dispatcher =
+        RequestDispatcher dispatcher =
                 request.getRequestDispatcher("/WEB-INF/jsp/Login.jsp");
         dispatcher.forward(request, response);
     }
 
+    // ログイン処理
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
@@ -36,13 +38,15 @@ public class Login_servlet extends HttpServlet {
         boolean isLogin = dao.login(user);
 
         if (isLogin) {
-            // ★ここが最重要
+            // ===== 修正点 =====
+            // session には User オブジェクトを保存する
             HttpSession session = request.getSession();
-            session.setAttribute("loginUser", user.getName());
+            session.setAttribute("loginUser", user);
+            // ==================
 
             System.out.println("login user = " + user.getName());
-            System.out.println("session id = " + request.getSession().getId());
-            
+            System.out.println("session id = " + session.getId());
+
             // レンタル画面へ
             response.sendRedirect(request.getContextPath() + "/Rental_servlet");
 
