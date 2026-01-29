@@ -74,8 +74,8 @@ public class Rental_servlet extends HttpServlet {
         HttpSession session = request.getSession(false);
         // ログインユーザー取得
         User loginUser = (session != null)
-                ? (User) session.getAttribute("loginUser")
-                : null;
+                ? (User) session.getAttribute("loginUser")//真の場合
+                : null;//疑の場合
 
         // 未ログイン時は処理中断
         if (loginUser == null) {
