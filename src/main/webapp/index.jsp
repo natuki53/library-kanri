@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page import="model.User" %>
+<%@ page import="java.util.List" %>
+<%@ page import="model.Lend" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -54,7 +56,7 @@
 <tr>
     <th>
         <form action="Rental_servlet" method="get">
-            <input type="submit" value="レンタル">
+            <input type="submit" value="本　検索">
         </form>
     </th>
     <th>
@@ -64,14 +66,38 @@
     </th>
 </tr>
 </table>
+<%@ page import="java.util.List" %>
+<%@ page import="model.Lend" %>
 
-<%-- 未ログイン時のみ表示 --%>
-<% if (loginUser == null) { %>
-    <form action="deleteAcount_servlet" method="get" class="delete-btn">
-        <input type="submit" value="アカウント削除">
-    </form>
-<% } else{%>
-		
-<%} %>
+<%
+List<Lend> lendList = (List<Lend>) request.getAttribute("lendList");
+%>
+
+<% if (loginUser != null) { %>
+    <h2>現在借りている本</h2>
+
+    <% if (lendList != null && !lendList.isEmpty()) { %>
+        <table border="1">
+            <tr>
+                <th>書籍名</th>
+                <th>貸出日</th>
+                <th>返却期限</th>
+            </tr>
+            <% for (Lend lend : lendList) { %>
+                <tr>
+                    <td><%= lend.getBookname() %></td>
+                    <td><%= lend.getLendDate() %></td>
+                    <td>
+                        <%= new java.sql.Date(
+                            lend.getLendDate().getTime()
+                            + 7L * 24 * 60 * 60 * 1000) %>
+                    </td>
+                </tr>
+            <% } %>
+        </table>
+    <% } else { %>
+        <p>現在借りている本はありません。</p>
+    <% } %>
+<% } %>
 </body>
 </html>

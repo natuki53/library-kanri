@@ -39,7 +39,7 @@ List<Book> books = (List<Book>) request.getAttribute("books");
 
     <!-- 更新ボタン（検索条件リセット） -->
     <form action="Rental_servlet" method="get" class="search-form" style="display:inline;">
-        <button type="submit">更新</button>
+        <button type="submit">一覧に戻る</button>
     </form>
 
     <table border="1">
@@ -47,7 +47,6 @@ List<Book> books = (List<Book>) request.getAttribute("books");
             <th>書籍名</th>
             <th>在庫数</th>
             <th>貸出</th>
-            <th>返却</th>
         </tr>
 
         <% if (books != null) { %>
@@ -64,13 +63,6 @@ List<Book> books = (List<Book>) request.getAttribute("books");
                     </form>
                 </td>
 
-                <td>
-                    <form action="Rental_servlet" method="post" class="search-form">
-                        <input type="hidden" name="action" value="return">
-                        <input type="hidden" name="bookname" value="<%= book.getBook() %>">
-                        <button type="submit">返却</button>
-                    </form>
-                </td>
             </tr>
             <% } %>
         <% } %>

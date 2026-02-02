@@ -4,6 +4,10 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
+
+import model.Lend;
 
 public class LendDao {
 
@@ -163,5 +167,36 @@ public class LendDao {
             e.printStackTrace();
             return false;
         }
+    }
+    public List<Lend> findLendingBooksByUser(String name) {
+
+        List<Lend> list = new ArrayList<>();
+
+        String sql =
+            "SELECT name, bookname, lend_date " +
+            "FROM lend " +
+            "WHERE name=? " +
+            "AND CURDATE() <= DATE_ADD(lend_date, INTERVAL 7 DAY) " +
+            "ORDER BY lend_date";
+
+        try (Connection con = DriverManager.getConnection(URL, USER, PASS);
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, name);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Lend lend = new Lend();
+                lend.setName(rs.getString("name"));
+                lend.setBookname(rs.getString("bookname"));
+                lend.setLendDate(rs.getDate("lend_date"));
+                list.add(lend);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return list;
     }
 }
