@@ -5,6 +5,9 @@ public class Book {
     private String book;
     private int number;
 
+    // ★ 追加
+    private boolean alreadyLent;
+
     public int getId() {
         return id;
     }
@@ -24,5 +27,13 @@ public class Book {
     }
     public void setNumber(int number) {
         this.number = number;
+    }
+
+    // ★ 追加
+    public boolean isAlreadyLent() {
+        return alreadyLent;
+    }
+    public void setAlreadyLent(boolean alreadyLent) {
+        this.alreadyLent = alreadyLent;
     }
 }

@@ -67,7 +67,7 @@ if (session != null) {
 	<th>
 	
             <form action="Rental_servlet" method="get">
-                <input type="submit" value="貸出・検索">
+                <input type="submit" value="本　検索">
             </form>
 	</th>
     <th>
@@ -80,6 +80,7 @@ if (session != null) {
         <% } %>
     </th>
 </tr>
+
 </table>
 
 </body>

@@ -131,3 +131,14 @@ form.delete-btn input[type="submit"] {
 form.delete-btn input[type="submit"]:hover {
     background-color: #b71c1c;
 }
+
+button.lent {
+    background-color: #e74c3c; /* 赤 */
+    color: white;
+    cursor: not-allowed;
+}
+
+button.available {
+    background-color: #2ecc71; /* 緑 */
+    color: white;
+}

@@ -24,31 +24,42 @@ public class Rental_servlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        // ログイン状態取得（未ログイン可）
         HttpSession session = request.getSession(false);
         User loginUser =
             (session != null) ? (User) session.getAttribute("loginUser") : null;
 
-        request.setAttribute("loginUser", loginUser);
+        /* ===== 書籍一覧（常に取得） ===== */
+        String keyword = request.getParameter("keyword");
 
+        
+        List<Book> books =
+        	    (keyword == null || keyword.isEmpty())
+        	        ? dao.getAllBooks()
+        	        : dao.searchBooks(keyword);
+
+        	/* ★ 追加：ログイン時のみ貸出状態を判定 */
+        	if (loginUser != null) {
+        	    for (Book book : books) {
+        	        boolean lent =
+        	            dao.isAlreadyLent(loginUser.getId(), book.getBook());
+        	        book.setAlreadyLent(lent);
+        	    }
+        	}
+
+        	request.setAttribute("books", books);
+        
+       System.out.println("Rental_servlet 43行目まで実行確認できた");
+        /* ===== ログイン時のみ ===== */
         if (loginUser != null) {
 
-            // 書籍検索
-            String keyword = request.getParameter("keyword");
-            List<Book> books =
-                (keyword == null || keyword.isEmpty())
-                    ? dao.getAllBooks()
-                    : dao.searchBooks(keyword);
-
-            request.setAttribute("books", books);
-
-            // 残り貸出可能数
             int remainLend = 3 - dao.countLend(loginUser.getId());
             request.setAttribute("remainLend", remainLend);
 
-            // 貸出中一覧
             List<Lend> lendList =
                 dao.findLendingBooksByUser(loginUser.getId());
             request.setAttribute("lendList", lendList);
+            System.out.println("Rental_servlet 行目まで実行確認できた");
         }
 
         request.getRequestDispatcher("/WEB-INF/jsp/rental.jsp")
@@ -63,6 +74,7 @@ public class Rental_servlet extends HttpServlet {
         User loginUser =
             (session != null) ? (User) session.getAttribute("loginUser") : null;
 
+        // 貸出・返却はログイン必須
         if (loginUser == null) {
             request.setAttribute("popupMessage", "ログインしてください");
             doGet(request, response);
@@ -72,8 +84,8 @@ public class Rental_servlet extends HttpServlet {
         String action   = request.getParameter("action");
         String bookName = request.getParameter("bookname");
 
-        int userId   = loginUser.getId();
-        String name  = loginUser.getName();
+        int userId  = loginUser.getId();
+        String name = loginUser.getName();
 
         if ("rent".equals(action)) {
 
@@ -95,7 +107,7 @@ public class Rental_servlet extends HttpServlet {
             boolean result = dao.returnBook(userId, bookName);
             request.setAttribute(
                 "popupMessage",
-                result ? "返却完了" : "返却できません（期限切れ or 未貸出）"
+                result ? "返却完了" : "返却できません"
             );
         }
 

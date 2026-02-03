@@ -66,6 +66,9 @@ List<Lend> lendList = (List<Lend>) request.getAttribute("lendList");
 <form action="index.jsp" method="get">
     <input type="submit" value="トップに戻る">
 </form>
+<form action="Rental_servlet" method="get">
+	<input type="submit" value="貸出・検索">
+</form>
 
 </body>
 </html>

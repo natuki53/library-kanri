@@ -23,14 +23,17 @@ public class newAcount_servlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     // DB 接続情報
-    private static final String URL = "jdbc:mysql://localhost:3306/library-touroku?useSSL=false&serverTimezone=Asia/Tokyo";
+    private static final String URL =
+        "jdbc:mysql://localhost:3306/library-touroku?useSSL=false&serverTimezone=Asia/Tokyo";
     private static final String USER = "root";
     private static final String PASS = "";
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/newAcount.jsp");
+
+        RequestDispatcher dispatcher =
+            request.getRequestDispatcher("/WEB-INF/jsp/newAcount.jsp");
         dispatcher.forward(request, response);
     }
 
@@ -40,38 +43,44 @@ public class newAcount_servlet extends HttpServlet {
 
         request.setCharacterEncoding("UTF-8");
 
+        // ===== パラメータ取得 =====
         String name = request.getParameter("name");
         String pass = request.getParameter("pass");
 
+        // ===== 正規化（最重要）=====
+        name = normalize(name);
+        pass = normalize(pass);
+
+        // ===== 入力チェック =====
         if (isBlank(name) || isBlank(pass)) {
             request.setAttribute("errorMsg", "名前とパスワードは必須です");
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/newAcount.jsp");
+            RequestDispatcher dispatcher =
+                request.getRequestDispatcher("/WEB-INF/jsp/newAcount.jsp");
             dispatcher.forward(request, response);
             return;
         }
 
-        // ===== DB に登録 =====
+        // ===== DB登録 =====
         User user = null;
         boolean isRegistered = false;
 
         String sql = "INSERT INTO user(name, pass) VALUES(?, ?)";
 
         try (Connection con = DriverManager.getConnection(URL, USER, PASS);
-             PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+             PreparedStatement ps =
+                 con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-            ps.setString(1, name.trim());
-            ps.setString(2, pass.trim());
+            ps.setString(1, name);
+            ps.setString(2, pass);
 
             int count = ps.executeUpdate();
             if (count > 0) {
-                // 自動生成された id を取得
                 ResultSet rs = ps.getGeneratedKeys();
                 if (rs.next()) {
                     int id = rs.getInt(1);
-                    user = new User(id, name.trim(), pass.trim());
+                    user = new User(id, name, pass);
                     isRegistered = true;
 
-                    // ログイン状態としてセッションにセット
                     HttpSession session = request.getSession();
                     session.setAttribute("loginUser", user);
                 }
@@ -79,18 +88,29 @@ public class newAcount_servlet extends HttpServlet {
 
         } catch (SQLException e) {
             e.printStackTrace();
-            request.setAttribute("errorMsg", "登録に失敗しました（ユーザー名が重複している可能性があります）");
+            request.setAttribute(
+                "errorMsg",
+                "登録に失敗しました（ユーザー名が既に存在する可能性があります）"
+            );
         }
 
         request.setAttribute("isRegistered", isRegistered);
         request.setAttribute("user", user);
 
         RequestDispatcher dispatcher =
-                request.getRequestDispatcher("/WEB-INF/jsp_Result/newAcount_Result.jsp");
+            request.getRequestDispatcher("/WEB-INF/jsp_Result/newAcount_Result.jsp");
         dispatcher.forward(request, response);
     }
 
-    // null / 空文字 / 半角スペース / 全角スペースのみ true
+    // ===== 正規化 =====
+    // 前後の半角・全角空白を除去
+    private String normalize(String str) {
+        if (str == null) return null;
+        return str.replaceAll("^[\\s　]+|[\\s　]+$", "");
+    }
+
+    // ===== 空判定 =====
+    // null / 空文字 / 半角空白 / 全角空白のみ true
     private boolean isBlank(String str) {
         if (str == null) return true;
         String replaced = str.replace("　", " ").trim();
