@@ -1,0 +1,13 @@
+/* ==============================
+   貸出状態ボタン
+   ============================== */
+button.lent {
+    background-color: #e74c3c;
+    color: #fff;
+    cursor: not-allowed;
+}
+
+button.available {
+    background-color: #2ecc71;
+    color: #fff;
+}

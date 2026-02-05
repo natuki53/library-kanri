@@ -1,0 +1,65 @@
+@charset "UTF-8";
+
+/* ==============================
+   テーブルスクロール領域
+   ============================== */
+.table-wrapper {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+/* ==============================
+   テーブル共通（内容幅に合わせる）
+   ============================== */
+   table {
+       width: auto;
+       display: inline-table;
+       margin: 20px auto;
+       border-collapse: collapse;
+
+       background-color: transparent; /* ← ここが重要 */
+   }
+
+
+/* ==============================
+   ヘッダー固定
+   ============================== */
+thead th {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+
+    /* ヘッダーは少し濃くして可読性確保 */
+    background-color: rgba(52, 152, 219, 0.9);
+    color: #fff;
+}
+
+/* ==============================
+   セル共通
+   ============================== */
+th,
+td {
+    padding: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    text-align: left;
+}
+
+/* ==============================
+   行装飾
+   ============================== */
+tbody tr:nth-child(even) {
+    background-color: rgba(242, 242, 242, 0.6);
+}
+
+tbody tr:hover {
+    background-color: rgba(234, 242, 251, 0.8);
+}
+
+.rental-table {
+    background-color: #ffffff;
+}
+
+.rental-table th,
+.rental-table td {
+    background-color: #ffffff;
+}
