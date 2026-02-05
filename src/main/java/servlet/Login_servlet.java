@@ -21,7 +21,7 @@ public class Login_servlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     // DB 接続情報
-    private static final String URL = "jdbc:mysql://localhost:3306/library-touroku?useSSL=false&serverTimezone=Asia/Tokyo";
+    private static final String URL = "jdbc:mysql://localhost:3306/library-touroku";
     private static final String USER = "root";   // 必要に応じて変更
     private static final String PASS = "";       // 必要に応じて変更
 

@@ -24,7 +24,7 @@ public class newAcount_servlet extends HttpServlet {
 
     // DB 接続情報
     private static final String URL =
-        "jdbc:mysql://localhost:3306/library-touroku?useSSL=false&serverTimezone=Asia/Tokyo";
+        "jdbc:mysql://localhost:3306/library-touroku";
     private static final String USER = "root";
     private static final String PASS = "";
 
@@ -65,7 +65,9 @@ public class newAcount_servlet extends HttpServlet {
         boolean isRegistered = false;
 
         String sql = "INSERT INTO user(name, pass) VALUES(?, ?)";
-
+         
+        System.out.println("newAcount_servletの69行目まで実行できた");
+        
         try (Connection con = DriverManager.getConnection(URL, USER, PASS);
              PreparedStatement ps =
                  con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -73,6 +75,8 @@ public class newAcount_servlet extends HttpServlet {
             ps.setString(1, name);
             ps.setString(2, pass);
 
+            System.out.println("78行目まで実行できた");
+            
             int count = ps.executeUpdate();
             if (count > 0) {
                 ResultSet rs = ps.getGeneratedKeys();

@@ -16,10 +16,12 @@ public class UserDao {
     private final String DB_USER = "root";
     // DBパスワード
     private final String DB_PASS = "";
-
+    
     // 新規ユーザー登録
     public boolean create(User user) {
-
+    	
+    	System.out.println("UserDaoの23行目まで実行できた");
+    	
         // JDBCドライバ読み込み
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -27,8 +29,10 @@ public class UserDao {
             throw new IllegalStateException("JDBCドライバの読み込み失敗", e);
         }
 
-        String sql = "INSERT INTO user (name, pass) VALUES (?, ?)";
-
+        String sql = "INSERT INTO user(name, pass, lend) VALUES(?, ?, 3)";
+        
+        System.out.println("32行目まで実行できた");
+        
         try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS);
              PreparedStatement ps = conn.prepareStatement(sql)) {
 

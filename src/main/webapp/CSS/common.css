@@ -12,7 +12,10 @@ body {
     font-family: "Segoe UI", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
     color: #333;
 	background-image: linear-gradient(rgba(255,255,255,0.6),rgba(255,255,255,0.6)),url("../images/library.jpg");
-
+	background-size: cover;
+	    background-position: center;
+	    background-repeat: no-repeat;
+	    background-attachment: fixed;
 }
 
 /* ==============================

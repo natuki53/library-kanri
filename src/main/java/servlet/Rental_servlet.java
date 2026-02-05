@@ -25,29 +25,36 @@ public class Rental_servlet extends HttpServlet {
         HttpSession session = request.getSession();
         User loginUser = (User) session.getAttribute("loginUser");
 
-        RentalLendDao rentalDao = new RentalLendDao();
         ListDao listDao = new ListDao();
+        RentalLendDao rentalDao = new RentalLendDao();
 
+        // 本一覧（在庫は list.number をそのまま使う）
         List<Book> books = listDao.findAll();
 
         if (loginUser != null) {
 
+            // 既に借りている本の判定（14日以内）
             for (Book b : books) {
                 b.setAlreadyLent(
                     rentalDao.isAlreadyLent(loginUser.getId(), b.getBook())
                 );
             }
 
-            int remain = 1 - rentalDao.countAllLend(loginUser.getId());
-            request.setAttribute("remainLend", remain);
+            // ユーザー残り貸出可能数（上限 − 有効貸出数）
+            int remainLend =
+                    RentalLendDao.MAX_LEND
+                  - rentalDao.countValidLend(loginUser.getId());
 
+            request.setAttribute("remainLend", remainLend);
+
+            // 貸出中一覧（14日以内）
             request.setAttribute(
                 "lendList",
                 rentalDao.findLendingBooksByUser(loginUser.getId())
             );
         }
 
-        // ★ PRG用メッセージ
+        // PRGメッセージ
         String msg = (String) session.getAttribute("popupMessage");
         if (msg != null) {
             request.setAttribute("popupMessage", msg);
@@ -82,7 +89,7 @@ public class Rental_servlet extends HttpServlet {
             );
         }
 
-        // ★ PRG（絶対必須）
+        // PRG
         response.sendRedirect(request.getContextPath() + "/Rental_servlet");
     }
 }

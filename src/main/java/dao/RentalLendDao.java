@@ -16,11 +16,14 @@ public class RentalLendDao {
     private static final String USER = "root";
     private static final String PASS = "";
 
-    // ★ 要件：1人1冊まで
-    private static final int MAX_LEND = 1;
+    // ユーザー貸出上限
+    public static final int MAX_LEND = 3;
+
+    // 貸出期間
+    private static final int LEND_DAYS = 14;
 
     /* ======================
-       貸出数（制限判定用・期限無視）
+       全貸出数（制御用）
        ====================== */
     public int countAllLend(int userId) {
         String sql = "SELECT COUNT(*) FROM lend WHERE user_id=?";
@@ -39,19 +42,21 @@ public class RentalLendDao {
     }
 
     /* ======================
-       表示用：有効貸出数（7日以内）
+       有効貸出数（14日以内・表示用）
        ====================== */
     public int countValidLend(int userId) {
         String sql = """
-            SELECT COUNT(*) FROM lend
+            SELECT COUNT(*)
+            FROM lend
             WHERE user_id=?
-              AND CURDATE() <= DATE_ADD(lend_date, INTERVAL 7 DAY)
+              AND CURDATE() <= DATE_ADD(lend_date, INTERVAL ? DAY)
         """;
 
         try (Connection con = DriverManager.getConnection(URL, USER, PASS);
              PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setInt(1, userId);
+            ps.setInt(2, LEND_DAYS);
             ResultSet rs = ps.executeQuery();
             rs.next();
             return rs.getInt(1);
@@ -63,12 +68,15 @@ public class RentalLendDao {
     }
 
     /* ======================
-       既に借りているか（表示制御）
+       既に借りているか（14日以内）
        ====================== */
     public boolean isAlreadyLent(int userId, String bookName) {
         String sql = """
-            SELECT COUNT(*) FROM lend
-            WHERE user_id=? AND bookname=?
+            SELECT COUNT(*)
+            FROM lend
+            WHERE user_id=?
+              AND bookname=?
+              AND CURDATE() <= DATE_ADD(lend_date, INTERVAL ? DAY)
         """;
 
         try (Connection con = DriverManager.getConnection(URL, USER, PASS);
@@ -76,6 +84,7 @@ public class RentalLendDao {
 
             ps.setInt(1, userId);
             ps.setString(2, bookName);
+            ps.setInt(3, LEND_DAYS);
             ResultSet rs = ps.executeQuery();
             rs.next();
             return rs.getInt(1) > 0;
@@ -91,7 +100,7 @@ public class RentalLendDao {
        ====================== */
     public boolean lendBook(int userId, String userName, String bookName) {
 
-        // ★ DB基準で制限
+        // 上限チェック（DB基準）
         if (countAllLend(userId) >= MAX_LEND) return false;
 
         String updateBook =
@@ -131,7 +140,7 @@ public class RentalLendDao {
     }
 
     /* ======================
-       貸出中一覧（表示用）
+       貸出中一覧（14日以内）
        ====================== */
     public List<Lend> findLendingBooksByUser(int userId) {
 
@@ -140,7 +149,7 @@ public class RentalLendDao {
             SELECT name, bookname, lend_date
             FROM lend
             WHERE user_id=?
-              AND CURDATE() <= DATE_ADD(lend_date, INTERVAL 7 DAY)
+              AND CURDATE() <= DATE_ADD(lend_date, INTERVAL ? DAY)
             ORDER BY lend_date
         """;
 
@@ -148,6 +157,7 @@ public class RentalLendDao {
              PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setInt(1, userId);
+            ps.setInt(2, LEND_DAYS);
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
