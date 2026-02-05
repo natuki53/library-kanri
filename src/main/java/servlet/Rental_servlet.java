@@ -3,7 +3,6 @@ package servlet;
 import java.io.IOException;
 import java.util.List;
 
-import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -14,7 +13,6 @@ import jakarta.servlet.http.HttpSession;
 import dao.ListDao;
 import dao.RentalLendDao;
 import model.Book;
-import model.Lend;
 import model.User;
 
 @WebServlet("/Rental_servlet")
@@ -27,42 +25,38 @@ public class Rental_servlet extends HttpServlet {
         HttpSession session = request.getSession();
         User loginUser = (User) session.getAttribute("loginUser");
 
-        ListDao listDao = new ListDao();
         RentalLendDao rentalDao = new RentalLendDao();
+        ListDao listDao = new ListDao();
 
-        String keyword = request.getParameter("keyword");
+        List<Book> books = listDao.findAll();
 
-        List<Book> books;
-
-        if (keyword != null && !keyword.isEmpty()) {
-            books = rentalDao.searchBooks(keyword);
-        } else {
-            books = listDao.findAll();
-        }
-
-        // ★ 追加：ログイン中のみ貸出状態を判定
         if (loginUser != null) {
+
             for (Book b : books) {
-                boolean lent =
-                    rentalDao.isAlreadyLent(loginUser.getId(), b.getBook());
-                b.setAlreadyLent(lent);
+                b.setAlreadyLent(
+                    rentalDao.isAlreadyLent(loginUser.getId(), b.getBook())
+                );
             }
 
-            int remain = 3 - rentalDao.countLend(loginUser.getId());
+            int remain = 1 - rentalDao.countAllLend(loginUser.getId());
             request.setAttribute("remainLend", remain);
 
-            // ★ 追加：貸出中一覧（既存仕様）
-            List<Lend> lendList =
-                rentalDao.findLendingBooksByUser(loginUser.getId());
-            request.setAttribute("lendList", lendList);
+            request.setAttribute(
+                "lendList",
+                rentalDao.findLendingBooksByUser(loginUser.getId())
+            );
         }
 
-        // ★ 既存：Book に detail / alreadyLent が入った状態で渡す
-        request.setAttribute("books", books);
+        // ★ PRG用メッセージ
+        String msg = (String) session.getAttribute("popupMessage");
+        if (msg != null) {
+            request.setAttribute("popupMessage", msg);
+            session.removeAttribute("popupMessage");
+        }
 
-        RequestDispatcher rd =
-            request.getRequestDispatcher("/WEB-INF/jsp/rental.jsp");
-        rd.forward(request, response);
+        request.setAttribute("books", books);
+        request.getRequestDispatcher("/WEB-INF/jsp/rental.jsp")
+               .forward(request, response);
     }
 
     @Override
@@ -72,28 +66,23 @@ public class Rental_servlet extends HttpServlet {
         HttpSession session = request.getSession();
         User loginUser = (User) session.getAttribute("loginUser");
 
-        String action = request.getParameter("action");
-        String bookName = request.getParameter("bookname");
+        if (loginUser != null &&
+            "rent".equals(request.getParameter("action"))) {
 
-        RentalLendDao rentalDao = new RentalLendDao();
-
-        String message = null;
-
-        if (loginUser != null && "rent".equals(action)) {
-
-            boolean result = rentalDao.lendBook(
+            RentalLendDao dao = new RentalLendDao();
+            boolean result = dao.lendBook(
                 loginUser.getId(),
                 loginUser.getName(),
-                bookName
+                request.getParameter("bookname")
             );
 
-            // ★ 既存仕様
-            message = result ? "貸出が完了しました" : "貸出できません";
+            session.setAttribute(
+                "popupMessage",
+                result ? "貸出が完了しました" : "これ以上借りられません"
+            );
         }
 
-        request.setAttribute("popupMessage", message);
-
-        // ★ 再表示
-        doGet(request, response);
+        // ★ PRG（絶対必須）
+        response.sendRedirect(request.getContextPath() + "/Rental_servlet");
     }
 }

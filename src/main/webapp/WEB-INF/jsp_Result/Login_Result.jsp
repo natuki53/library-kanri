@@ -5,6 +5,8 @@
 <head>
 <meta charset="UTF-8">
 <link rel="stylesheet" href="<%= request.getContextPath() %>/CSS/common.css">
+<link rel="stylesheet" href="<%= request.getContextPath() %>/CSS/table.css">
+<link rel="stylesheet" href="<%= request.getContextPath() %>/CSS/form.css">
 <title>ログイン成功</title>
 </head>
 <body>

@@ -5,6 +5,8 @@
 <head>
 <meta charset="UTF-8">
 <link rel="stylesheet" href="<%= request.getContextPath() %>/CSS/common.css">
+<link rel="stylesheet" href="<%= request.getContextPath() %>/CSS/table.css">
+<link rel="stylesheet" href="<%= request.getContextPath() %>/CSS/form.css">
 <title>新規登録結果</title>
 </head>
 <body>

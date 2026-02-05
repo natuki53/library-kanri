@@ -9,11 +9,22 @@
 <head>
 <meta charset="UTF-8">
 <link rel="stylesheet" href="<%= request.getContextPath() %>/CSS/common.css">
+ <link rel="stylesheet" href="<%= request.getContextPath() %>/CSS/table.css"> 
+ <link rel="stylesheet" href="<%= request.getContextPath() %>/CSS/form.css">
 <title>図書管理システム</title>
 </head>
 <body>
 
-<h1>図書管理システム</h1>
+<!-- 
+<a href = "index.jsp">
+<div class="hover-img"></div>
+</a>
+-->
+
+<a href ="index.jsp"><img src ="images/library.png"></a>
+
+<div class="container">
+
 
 <%
 User loginUser = null;
@@ -25,63 +36,62 @@ if (session != null) {
 }
 %>
 
-<!-- ログイン状態 -->
 <% if (loginUser != null) { %>
-    <p style="color: green; font-weight: bold;">
+    <p class="login ok">
         ログイン中：<%= loginUser.getName() %> さん
     </p>
 <% } else { %>
-    <p style="color: red; font-weight: bold;">
+    <p class="login ng">
         ログインしていません
     </p>
 <% } %>
 
 <hr>
 
-<!-- メニュー -->
-<table>
-<tr>
-    <th>
-        <% if (loginUser == null) { %>
-            <form action="newAcount_servlet" method="get">
-                <input type="submit" value="新規登録">
-            </form>
-        <% } else { %>
-            <form action="MyLibrary_servlet" method="get">
-                <input type="submit" value="Myライブラリ">
-            </form>
-        <% } %>
-    </th>
+<div class="menu">
+	<table>
+	<tr>
+		<th>
+   			 <% if (loginUser == null) { %>
+        		<form action="newAcount_servlet" method="get">
+            		<input type="submit" value="新規登録">
+        		</form>
+    		<% } else { %>
+        		<form action="MyLibrary_servlet" method="get">
+           			 <input type="submit" value="Myライブラリ">
+       			 </form>
+   			 <% } %>
+    	</th>
+		<th>
+   		 	<% if (loginUser == null) { %>
+        		<form action="Login_servlet" method="get">
+            		<input type="submit" value="ログイン">
+        		</form>
+    		<% } else { %>
+        		<p>ログイン中のためログイン不可</p>
+    		<% } %>
+    	</th>
+    </tr>
+	<tr>
+		<th>
+    		<form action="Rental_servlet" method="get">
+        		<input type="submit" value="本 検索">
+    		</form>
+		</th>
+		<th>
+    		<% if (loginUser != null) { %>
+        		<form action="Logout_servlet" method="get">
+            		<input type="submit" value="ログアウト">
+        		</form>
+    		<% } else { %>
+        		<p>ログアウト不可</p>
+    		<% } %>
+    	</th>
+    </tr>
+	</table>
+</div>
 
-    <th>
-        <% if (loginUser == null) { %>
-            <form action="Login_servlet" method="get">
-                <input type="submit" value="ログイン">
-            </form>
-        <% } else { %>
-            <p>ログイン中のためログイン不可</p>
-        <% } %>
-    </th>
-</tr>
-<tr>
-	<th>
-	
-            <form action="Rental_servlet" method="get">
-                <input type="submit" value="本　検索">
-            </form>
-	</th>
-    <th>
-        <% if (loginUser != null) { %>
-            <form action="Logout_servlet" method="get">
-                <input type="submit" value="ログアウト">
-            </form>
-        <% } else { %>
-            <p>ログアウト不可</p>
-        <% } %>
-    </th>
-</tr>
-
-</table>
+</div>
 
 </body>
 </html>

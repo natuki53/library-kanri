@@ -4,17 +4,35 @@
 <head>
 <meta charset="UTF-8">
 <link rel="stylesheet" href="<%= request.getContextPath() %>/CSS/common.css">
+<link rel="stylesheet" href="<%= request.getContextPath() %>/CSS/table.css">
+<link rel="stylesheet" href="<%= request.getContextPath() %>/CSS/form.css">
 <link rel="stylesheet" href="<%= request.getContextPath() %>/CSS/search_form.css">
 <title>ログアウト</title>
 </head>
 <body>
 
-<h1><%= request.getAttribute("message") %></h1>
+<!-- 
+<a href = "index.jsp">
+<div class="hover-img"></div>
+</a>
+-->
 
-<a href="<%= request.getContextPath() %>/Login_servlet">ログイン画面へ</a>
-<br>
-<div class="right-area">
-    <a href="index.jsp">TOPへ</a>
+<a href ="index.jsp"><img src ="images/library.png"></a>
+<div class="container">
+
+    <h1><%= request.getAttribute("message") %></h1>
+
+    <p>
+        <a href="<%= request.getContextPath() %>/Login_servlet">
+            ログイン画面へ
+        </a>
+    </p>
+
+    <form action="index.jsp" method="get">
+        <input type="submit" value="トップに戻る">
+    </form>
+
 </div>
+
 </body>
 </html>

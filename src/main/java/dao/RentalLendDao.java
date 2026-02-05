@@ -7,7 +7,6 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-import model.Book;
 import model.Lend;
 
 public class RentalLendDao {
@@ -17,78 +16,36 @@ public class RentalLendDao {
     private static final String USER = "root";
     private static final String PASS = "";
 
-    private static final int MAX_LEND = 3;
+    // ★ 要件：1人1冊まで
+    private static final int MAX_LEND = 1;
 
     /* ======================
-       蔵書一覧
+       貸出数（制限判定用・期限無視）
        ====================== */
-
-    public List<Book> getAllBooks() {
-        List<Book> list = new ArrayList<>();
-
-        // ★ 追加：detail を含める
-        String sql = "SELECT book, number, detail FROM list";
-
-        try (Connection con = DriverManager.getConnection(URL, USER, PASS);
-             PreparedStatement ps = con.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
-
-            while (rs.next()) {
-                Book b = new Book();
-                b.setBook(rs.getString("book"));
-                b.setNumber(rs.getInt("number"));
-
-                // ★ 追加
-                b.setDetail(rs.getString("detail"));
-
-                list.add(b);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return list;
-    }
-
-    /* ======================
-       検索
-       ====================== */
-
-    public List<Book> searchBooks(String keyword) {
-        List<Book> list = new ArrayList<>();
-
-        // ★ 追加：detail を含める
-        String sql = "SELECT book, number, detail FROM list WHERE book LIKE ?";
-
+    public int countAllLend(int userId) {
+        String sql = "SELECT COUNT(*) FROM lend WHERE user_id=?";
         try (Connection con = DriverManager.getConnection(URL, USER, PASS);
              PreparedStatement ps = con.prepareStatement(sql)) {
 
-            ps.setString(1, "%" + keyword + "%");
+            ps.setInt(1, userId);
             ResultSet rs = ps.executeQuery();
+            rs.next();
+            return rs.getInt(1);
 
-            while (rs.next()) {
-                Book b = new Book();
-                b.setBook(rs.getString("book"));
-                b.setNumber(rs.getInt("number"));
-
-                // ★ 追加
-                b.setDetail(rs.getString("detail"));
-
-                list.add(b);
-            }
         } catch (Exception e) {
             e.printStackTrace();
+            return MAX_LEND; // 安全側
         }
-        return list;
     }
 
     /* ======================
-       貸出判定系
+       表示用：有効貸出数（7日以内）
        ====================== */
-
-    public int countLend(int userId) {
+    public int countValidLend(int userId) {
         String sql = """
             SELECT COUNT(*) FROM lend
-            WHERE user_id=? AND CURDATE() <= DATE_ADD(lend_date, INTERVAL 7 DAY)
+            WHERE user_id=?
+              AND CURDATE() <= DATE_ADD(lend_date, INTERVAL 7 DAY)
         """;
 
         try (Connection con = DriverManager.getConnection(URL, USER, PASS);
@@ -105,11 +62,13 @@ public class RentalLendDao {
         }
     }
 
+    /* ======================
+       既に借りているか（表示制御）
+       ====================== */
     public boolean isAlreadyLent(int userId, String bookName) {
         String sql = """
             SELECT COUNT(*) FROM lend
             WHERE user_id=? AND bookname=?
-              AND CURDATE() <= DATE_ADD(lend_date, INTERVAL 7 DAY)
         """;
 
         try (Connection con = DriverManager.getConnection(URL, USER, PASS);
@@ -128,12 +87,12 @@ public class RentalLendDao {
     }
 
     /* ======================
-       貸出処理
+       貸出処理（完全防御）
        ====================== */
-
     public boolean lendBook(int userId, String userName, String bookName) {
 
-        if (countLend(userId) >= MAX_LEND) return false;
+        // ★ DB基準で制限
+        if (countAllLend(userId) >= MAX_LEND) return false;
 
         String updateBook =
             "UPDATE list SET number = number - 1 WHERE book=? AND number > 0";
@@ -172,52 +131,8 @@ public class RentalLendDao {
     }
 
     /* ======================
-       返却処理
+       貸出中一覧（表示用）
        ====================== */
-
-    public boolean returnBook(int userId, String bookName) {
-
-        String deleteLend =
-            "DELETE FROM lend WHERE user_id=? AND bookname=? " +
-            "AND CURDATE() <= DATE_ADD(lend_date, INTERVAL 7 DAY)";
-        String updateBook =
-            "UPDATE list SET number = number + 1 WHERE book=?";
-
-        try (Connection con = DriverManager.getConnection(URL, USER, PASS)) {
-            con.setAutoCommit(false);
-
-            try (PreparedStatement psDelete = con.prepareStatement(deleteLend);
-                 PreparedStatement psBook = con.prepareStatement(updateBook)) {
-
-                psDelete.setInt(1, userId);
-                psDelete.setString(2, bookName);
-
-                if (psDelete.executeUpdate() == 0) {
-                    con.rollback();
-                    return false;
-                }
-
-                psBook.setString(1, bookName);
-                psBook.executeUpdate();
-
-                con.commit();
-                return true;
-
-            } catch (Exception e) {
-                con.rollback();
-                e.printStackTrace();
-                return false;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    /* ======================
-       貸出中一覧
-       ====================== */
-
     public List<Lend> findLendingBooksByUser(int userId) {
 
         List<Lend> list = new ArrayList<>();

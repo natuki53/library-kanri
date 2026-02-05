@@ -5,6 +5,8 @@
 <head>
 <meta charset="UTF-8">
 <link rel="stylesheet" href="<%= request.getContextPath() %>/CSS/common.css">
+<link rel="stylesheet" href="<%= request.getContextPath() %>/CSS/table.css">
+<link rel="stylesheet" href="<%= request.getContextPath() %>/CSS/form.css">
 <title>図書管理システム</title>
 </head>
 <body>
