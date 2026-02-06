@@ -37,7 +37,11 @@ thead th {
 /* ==============================
    セル共通
    ============================== */
-th,
+   /* 検索エリアの th を中央揃え */
+   table th {
+       vertical-align: middle;   /* ★ 縦ズレ解消 */
+       text-align: center;       /* 横も統一 */
+   }
 td {
     padding: 10px;
     border: 1px solid rgba(0, 0, 0, 0.1);

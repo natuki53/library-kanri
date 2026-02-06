@@ -19,17 +19,14 @@
 /* ==================================================
    検索・更新フォーム共通
    ================================================== */
-.search-form {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+   .search-form input[type="text"] {
+       height: 40px;   /* ボタンと同一基準 */
+   }
 
-    /* common.css（form共通指定）の打ち消し */
-    background: none;
-    padding: 0;
-    box-shadow: none;
-    max-width: none;
-}
+   .search-form button {
+       height: 40px;   /* ★ 明示的に揃える */
+       margin-top: 0;
+   }
 
 
 /* ==================================================

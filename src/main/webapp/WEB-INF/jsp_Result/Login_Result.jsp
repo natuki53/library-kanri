@@ -11,6 +11,7 @@
 </head>
 <body>
 
+<div class="container">
 <h1>ログイン成功</h1>
 
 <p>
@@ -20,7 +21,9 @@
 </p>
 
 <!-- <a href="<%= request.getContextPath() %>/index.jsp">TOPへ</a> -->
-<form action="rental_servlet" mthod = "get"><input type ="submit" value ="貸し出し">
-
+<form action="rental_servlet" mthod = "get">
+	<input type ="submit" value ="貸し出し">
+</form>
+</div>
 </body>
 </html>

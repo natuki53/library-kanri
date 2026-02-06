@@ -5,7 +5,7 @@ form:not(.delete-btn) {
     max-width: 600px;
     margin: 0 auto;              /* ★ 中央揃えの本体 */
     padding: 20px;
-    background-color: #fff;
+    background-color: #7890;
     border-radius: 6px;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
@@ -19,7 +19,7 @@ form label {
 form input,
 form select,
 form textarea {
-    width: 100%;
+    width: 60%;
     margin-top: 5px;
     padding: 8px;
     border: 1px solid #ccc;
@@ -29,7 +29,8 @@ form textarea {
 /* 通常ボタン */
 form:not(.delete-btn) input[type="submit"],
 form:not(.delete-btn) button {
-    margin-top: 20px;
+    display: block;        /* ★ 追加 */
+    margin: 20px auto 0;   /* ★ 中央揃え */
     padding: 10px 16px;
     border: none;
     border-radius: 4px;

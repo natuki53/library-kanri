@@ -18,16 +18,8 @@ public class ListDao {
 
     public List<Book> findAll() {
 
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        List<Book> bookList = new ArrayList<>();
-
-        // ★ 追加：detail カラムを取得
-        String sql = "SELECT id, book, number, detail FROM list";
+        List<Book> list = new ArrayList<>();
+        String sql = "SELECT book, number FROM list ORDER BY book";
 
         try (Connection con = DriverManager.getConnection(URL, USER, PASS);
              PreparedStatement ps = con.prepareStatement(sql);
@@ -35,20 +27,41 @@ public class ListDao {
 
             while (rs.next()) {
                 Book b = new Book();
-                b.setId(rs.getInt("id"));
                 b.setBook(rs.getString("book"));
                 b.setNumber(rs.getInt("number"));
-
-                // ★ 追加：図書詳細情報
-                b.setDetail(rs.getString("detail"));
-
-                bookList.add(b);
+                list.add(b);
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return list;
+    }
 
-        return bookList;
+    public List<Book> findByKeyword(String keyword) {
+
+        List<Book> list = new ArrayList<>();
+        String sql = """
+            SELECT book, number
+            FROM list
+            WHERE book LIKE ?
+            ORDER BY book
+        """;
+
+        try (Connection con = DriverManager.getConnection(URL, USER, PASS);
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, "%" + keyword + "%");
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Book b = new Book();
+                b.setBook(rs.getString("book"));
+                b.setNumber(rs.getInt("number"));
+                list.add(b);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
     }
 }

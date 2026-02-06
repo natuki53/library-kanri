@@ -11,6 +11,7 @@
 </head>
 <body>
 
+<div class="container">
 <h1>図書管理システム</h1>
 
 <h2>アカウントを削除できました</h2>
@@ -23,6 +24,6 @@
 <form action="index.jsp" method="get">
     <input type="submit" value="トップページへ戻る">
 </form>
-
+</div>
 </body>
 </html>

@@ -10,7 +10,7 @@
 <title>新規登録結果</title>
 </head>
 <body>
-
+<div class="container">
 <%
 Boolean isRegistered = (Boolean) request.getAttribute("isRegistered");
 %>
@@ -26,6 +26,6 @@ Boolean isRegistered = (Boolean) request.getAttribute("isRegistered");
 
 <br>
 <a href="index.jsp">TOPへ</a>
-
+</div>
 </body>
 </html>
