@@ -90,8 +90,7 @@ if (session != null) {
     </tr>
 	</table>
 </div>
-
 </div>
-
+<hr>
 </body>
 </html>
